@@ -16,6 +16,15 @@ __attribute__((eosio_wasm_import))
 int32_t alt_bn128_pair( const char* op1_data, uint32_t op1_length,
                     char* result , uint32_t result_length);
 
+__attribute__((eosio_wasm_import)) 
+int32_t mod_exp( uint32_t base_len,
+                 uint32_t exp_len,
+                 uint32_t mod_len, 
+                 const char* base_data, uint32_t base_length,
+                 const char* exp_data, uint32_t exp_length,
+                 const char* mod_data, uint32_t mod_length,
+                 char* result, uint32_t result_length);
+
 }
 
 ACTION altbn128::hi( name nm ) {
@@ -60,4 +69,14 @@ ACTION altbn128::hi( name nm ) {
    alt_bn128_pair( (char*)g1g2pairs, 384, (char*)rut, 64);
    print_f("OUT:"); eosio::printhex(rut, 64); print_f("\n");
 
+
+   uint32_t l1 = 1;
+   uint32_t l2 = 2;
+   uint32_t l3 = 32;
+   unsigned char tt1[1] = { 3 };
+   unsigned char tt2[2] = { 255, 255 };
+   unsigned char tt3[32] = { 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+   unsigned char mer[64] = { 0 };
+   mod_exp( l1, l2, l3, (char*)tt1, l1, (char*)tt2, l2, (char*)tt3, l3, (char*)mer, 64 );
+   print_f("OUT:"); eosio::printhex(mer, 64); print_f("\n");
 }
